@@ -1,0 +1,17 @@
+# Maven
+target/
+
+# Allure
+allure-results/
+target/allure-results/
+
+# IntelliJ IDEA
+.idea/
+out/
+*.iml
+
+# Java
+*.class
+
+# Environment files
+.env
