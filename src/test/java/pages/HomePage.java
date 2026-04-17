@@ -35,12 +35,6 @@ public class HomePage extends BasePage {
         wait.until(ExpectedConditions.stalenessOf(oldProducts.get(0)));
     }
 
-    private List<WebElement> getProductNameElements() {
-        return wait.until(
-                ExpectedConditions.presenceOfAllElementsLocatedBy(productNamesLocator)
-        );
-    }
-
     public List<String> getProductNames() {
         return waitForAllElements(productNamesLocator)
                 .stream()

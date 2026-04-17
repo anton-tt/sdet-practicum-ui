@@ -2,81 +2,57 @@ package tests;
 
 import base.BaseTest;
 
+import enums.SortOption;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pages.HomePage;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class FirstTest extends BaseTest {
-    public static final String NAME_ASC = "pd.name-ASC";
-    public static final String NAME_DESC = "pd.name-DESC";
-    public static final String PRICE_ASC = "p.price-ASC";
-    public static final String PRICE_DESC = "p.price-DESC";
 
     @Test
     void sortByNameAscTest() {
-        HomePage homePage = new HomePage(driver);
-        homePage.open();
-
         homePage.openMenCategory();
-        homePage.selectSortOptionByValue(NAME_ASC);
+        homePage.selectSortOptionByValue(SortOption.NAME_ASC.getValue());
 
         List<String> actual = homePage.getProductNames();
-        List<String> expected = actual.stream()
-                .sorted()
-                .toList();
+        List<String> expected = actual.stream().sorted().toList();
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual, "Сортировка по имени A-Z некорректна");
     }
 
     @Test
     void sortByNameDescTest() {
-        HomePage homePage = new HomePage(driver);
-        homePage.open();
-
         homePage.openMenCategory();
-        homePage.selectSortOptionByValue(NAME_DESC);
+        homePage.selectSortOptionByValue(SortOption.NAME_DESC.getValue());
 
         List<String> actual = homePage.getProductNames();
-        List<String> expected = actual.stream()
-                .sorted(Comparator.reverseOrder())
-                .toList();
+        List<String> expected = actual.stream().sorted(Comparator.reverseOrder()).toList();
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual, "Сортировка по имени Z-A некорректна");
     }
 
     @Test
     void sortByPriceAscTest() {
-        HomePage homePage = new HomePage(driver);
-        homePage.open();
-
         homePage.openMenCategory();
-        homePage.selectSortOptionByValue(PRICE_ASC);
+        homePage.selectSortOptionByValue(SortOption.PRICE_ASC.getValue());
 
         List<Double> actual = homePage.getProductPrices();
-        List<Double> expected = actual.stream()
-                .sorted()
-                .toList();
+        List<Double> expected = actual.stream().sorted().toList();
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual, "Сортировка по цене Low>High некорректна");
     }
 
     @Test
     void sortByPriceDescTest() {
-        HomePage homePage = new HomePage(driver);
-        homePage.open();
-
         homePage.openMenCategory();
-        homePage.selectSortOptionByValue(PRICE_DESC);
+        homePage.selectSortOptionByValue(SortOption.PRICE_DESC.getValue());
 
         List<Double> actual = homePage.getProductPrices();
-        List<Double> expected = actual.stream()
-                .sorted(Comparator.reverseOrder())
-                .toList();
+        List<Double> expected = actual.stream().sorted(Comparator.reverseOrder()).toList();
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual, "Сортировка по цене High>Low некорректна");
     }
 
 }
