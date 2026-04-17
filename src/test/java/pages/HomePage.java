@@ -5,51 +5,34 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.List;
 
-public class HomePage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+public class HomePage extends BasePage {
     private static final String TEST_STORE_URL = "https://automationteststore.com/";
-    public static final String NAME_ASC = "pd.name-ASC";
-    public static final String NAME_DESC = "pd.name-DESC";
-    public static final String PRICE_ASC = "p.price-ASC";
-    public static final String PRICE_DESC = "p.price-DESC";
+    public HomePage(WebDriver driver) {
+        super(driver);
+    }
+
     private final By menCategoryLink = By.xpath("//a[contains(@href,'path=58')]");
+    private final By productCards = By.cssSelector(".thumbnail");
     private final By sortDropdown = By.id("sort");
     private final By productNamesLocator = By.cssSelector(".prdocutname");
     private final By productPricesLocator = By.cssSelector(".oneprice");
-
-    public HomePage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
 
     public void open() {
         driver.get(TEST_STORE_URL);
     }
 
     public void openMenCategory() {
-        wait.until(ExpectedConditions.elementToBeClickable(menCategoryLink)).click();
+        click(menCategoryLink);
     }
 
     public void selectSortOptionByValue(String value) {
-        WebElement dropdown = wait.until(
-                ExpectedConditions.elementToBeClickable(sortDropdown)
-        );
-        Select select = new Select(dropdown);
+        List<WebElement> oldProducts = waitForAllElements(productCards);
+        Select select = new Select(waitForClickable(sortDropdown));
         select.selectByValue(value);
-    }
-
-    public void sortByNameAsc() {
-        selectSortOptionByValue(NAME_ASC);
-    }
-
-    public void sortByNameDesc() {
-        selectSortOptionByValue(NAME_DESC);
+        wait.until(ExpectedConditions.stalenessOf(oldProducts.get(0)));
     }
 
     private List<WebElement> getProductNameElements() {
@@ -59,7 +42,7 @@ public class HomePage {
     }
 
     public List<String> getProductNames() {
-        return getProductNameElements()
+        return waitForAllElements(productNamesLocator)
                 .stream()
                 .map(WebElement::getText)
                 .map(String::trim)
@@ -67,22 +50,8 @@ public class HomePage {
                 .toList();
     }
 
-    public void sortByPriceAsc() {
-        selectSortOptionByValue(PRICE_ASC);
-    }
-
-    public void sortByPriceDesc() {
-        selectSortOptionByValue(PRICE_DESC);
-    }
-
-    private List<WebElement> getProductPriceElements() {
-        return wait.until(
-                ExpectedConditions.presenceOfAllElementsLocatedBy(productPricesLocator)
-        );
-    }
-
     public List<Double> getProductPrices() {
-        return getProductPriceElements()
+        return waitForAllElements(productPricesLocator)
                 .stream()
                 .map(e -> e.getText().replace("$", "").trim())
                 .filter(text -> !text.isBlank())

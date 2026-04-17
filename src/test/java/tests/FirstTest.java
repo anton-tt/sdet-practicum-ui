@@ -1,15 +1,19 @@
 package tests;
 
 import base.BaseTest;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pages.HomePage;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class FirstTest extends BaseTest {
+    public static final String NAME_ASC = "pd.name-ASC";
+    public static final String NAME_DESC = "pd.name-DESC";
+    public static final String PRICE_ASC = "p.price-ASC";
+    public static final String PRICE_DESC = "p.price-DESC";
 
     @Test
     void sortByNameAscTest() {
@@ -17,11 +21,12 @@ public class FirstTest extends BaseTest {
         homePage.open();
 
         homePage.openMenCategory();
-        homePage.sortByNameAsc();
-        List<String> actual = homePage.getProductNames();
+        homePage.selectSortOptionByValue(NAME_ASC);
 
-        List<String> expected = new ArrayList<>(actual);
-        Collections.sort(expected);
+        List<String> actual = homePage.getProductNames();
+        List<String> expected = actual.stream()
+                .sorted()
+                .toList();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -32,11 +37,12 @@ public class FirstTest extends BaseTest {
         homePage.open();
 
         homePage.openMenCategory();
-        homePage.sortByNameDesc();
-        List<String> actual = homePage.getProductNames();
+        homePage.selectSortOptionByValue(NAME_DESC);
 
-        List<String> expected = new ArrayList<>(actual);
-        expected.sort(Collections.reverseOrder());
+        List<String> actual = homePage.getProductNames();
+        List<String> expected = actual.stream()
+                .sorted(Comparator.reverseOrder())
+                .toList();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -47,11 +53,12 @@ public class FirstTest extends BaseTest {
         homePage.open();
 
         homePage.openMenCategory();
-        homePage.sortByPriceAsc();
-        List<Double> actual = homePage.getProductPrices();
+        homePage.selectSortOptionByValue(PRICE_ASC);
 
-        List<Double> expected = new ArrayList<>(actual);
-        Collections.sort(expected);
+        List<Double> actual = homePage.getProductPrices();
+        List<Double> expected = actual.stream()
+                .sorted()
+                .toList();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -62,11 +69,12 @@ public class FirstTest extends BaseTest {
         homePage.open();
 
         homePage.openMenCategory();
-        homePage.sortByPriceDesc();
-        List<Double> actual = homePage.getProductPrices();
+        homePage.selectSortOptionByValue(PRICE_DESC);
 
-        List<Double> expected = new ArrayList<>(actual);
-        expected.sort(Collections.reverseOrder());
+        List<Double> actual = homePage.getProductPrices();
+        List<Double> expected = actual.stream()
+                .sorted(Comparator.reverseOrder())
+                .toList();
 
         Assertions.assertEquals(expected, actual);
     }
