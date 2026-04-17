@@ -9,8 +9,9 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+import static base.Urls.TEST_STORE_URL;
+
 public class HomePage extends BasePage {
-    private static final String TEST_STORE_URL = "https://automationteststore.com/";
     public HomePage(WebDriver driver) {
         super(driver);
     }
