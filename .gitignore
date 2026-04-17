@@ -12,6 +12,7 @@ out/
 
 # Java
 *.class
+src/test/java/drafts/
 
 # Environment files
 .env
