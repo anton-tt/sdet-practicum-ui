@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,14 +21,17 @@ public class HomePage extends BasePage {
     private final By productNamesLocator = By.cssSelector(".prdocutname");
     private final By productPricesLocator = By.cssSelector(".oneprice");
 
+    @Step("Открыть главную страницу")
     public void open() {
         driver.get(TEST_STORE_URL);
     }
 
+    @Step("Открыть категорию Men")
     public void openMenCategory() {
         click(menCategoryLink);
     }
 
+    @Step("Выбрать сортировку: {option}")
     public void selectSortOptionByValue(String value) {
         List<WebElement> oldProducts = waitForAllElements(productCards);
         Select select = new Select(waitForClickable(sortDropdown));
