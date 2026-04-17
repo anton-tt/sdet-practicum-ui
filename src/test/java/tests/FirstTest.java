@@ -41,4 +41,34 @@ public class FirstTest extends BaseTest {
         Assertions.assertEquals(expected, actual);
     }
 
+    @Test
+    void sortByPriceAscTest() {
+        HomePage homePage = new HomePage(driver);
+        homePage.open();
+
+        homePage.openMenCategory();
+        homePage.sortByPriceAsc();
+        List<Double> actual = homePage.getProductPrices();
+
+        List<Double> expected = new ArrayList<>(actual);
+        Collections.sort(expected);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void sortByPriceDescTest() {
+        HomePage homePage = new HomePage(driver);
+        homePage.open();
+
+        homePage.openMenCategory();
+        homePage.sortByPriceDesc();
+        List<Double> actual = homePage.getProductPrices();
+
+        List<Double> expected = new ArrayList<>(actual);
+        expected.sort(Collections.reverseOrder());
+
+        Assertions.assertEquals(expected, actual);
+    }
+
 }

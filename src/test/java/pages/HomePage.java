@@ -16,9 +16,12 @@ public class HomePage {
     private static final String TEST_STORE_URL = "https://automationteststore.com/";
     public static final String NAME_ASC = "pd.name-ASC";
     public static final String NAME_DESC = "pd.name-DESC";
+    public static final String PRICE_ASC = "p.price-ASC";
+    public static final String PRICE_DESC = "p.price-DESC";
     private final By menCategoryLink = By.xpath("//a[contains(@href,'path=58')]");
     private final By sortDropdown = By.id("sort");
     private final By productNamesLocator = By.cssSelector(".prdocutname");
+    private final By productPricesLocator = By.cssSelector(".oneprice");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -61,6 +64,29 @@ public class HomePage {
                 .map(WebElement::getText)
                 .map(String::trim)
                 .filter(text -> !text.isBlank())
+                .toList();
+    }
+
+    public void sortByPriceAsc() {
+        selectSortOptionByValue(PRICE_ASC);
+    }
+
+    public void sortByPriceDesc() {
+        selectSortOptionByValue(PRICE_DESC);
+    }
+
+    private List<WebElement> getProductPriceElements() {
+        return wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(productPricesLocator)
+        );
+    }
+
+    public List<Double> getProductPrices() {
+        return getProductPriceElements()
+                .stream()
+                .map(e -> e.getText().replace("$", "").trim())
+                .filter(text -> !text.isBlank())
+                .map(Double::parseDouble)
                 .toList();
     }
 
