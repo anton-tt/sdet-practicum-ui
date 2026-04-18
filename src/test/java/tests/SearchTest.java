@@ -4,7 +4,9 @@ import base.BaseTest;
 import enums.SortOption;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import pages.ProductPage;
 import pages.SearchPage;
+import utils.Utils;
 
 import java.util.List;
 
@@ -29,6 +31,31 @@ public class SearchTest extends BaseTest {
         homePage.search(SEARCH_SHIRT);
         SearchPage searchPage = new SearchPage(driver);
         searchPage.openProductByIndex(2);
+    }
+
+    private void searchAndSort(SearchPage searchPage, SortOption option) {
+        homePage.search(SEARCH_SHIRT);
+        searchPage.sortBy(option.getValue());
+    }
+
+    @Test
+    void shouldAddProductsFromSearchToCart() {
+        SearchPage searchPage = new SearchPage(driver);
+        ProductPage productPage = new ProductPage(driver);
+
+        searchAndSort(searchPage, SortOption.NAME_ASC);
+        searchPage.openProductByIndex(2);
+
+        int qty2 = Utils.getRandomQuantity(1, 5);
+        productPage.setQuantity(qty2);
+        productPage.addToCart();
+
+        searchAndSort(searchPage, SortOption.NAME_ASC);
+        searchPage.openProductByIndex(3);
+
+        int qty3 = Utils.getRandomQuantity(1, 5);
+        productPage.setQuantity(qty3);
+        productPage.addToCart();
     }
 
 }
