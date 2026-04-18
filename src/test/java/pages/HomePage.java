@@ -21,6 +21,8 @@ public class HomePage extends BasePage {
     private final By sortDropdown = By.id("sort");
     private final By productNamesLocator = By.cssSelector(".prdocutname");
     private final By productPricesLocator = By.cssSelector(".oneprice");
+    private final By searchInput = By.id("filter_keyword");
+    private final By searchButton = By.cssSelector(".button-in-search");
 
     @Step("Открыть главную страницу")
     public void open() {
@@ -56,6 +58,12 @@ public class HomePage extends BasePage {
                 .filter(text -> !text.isBlank())
                 .map(Double::parseDouble)
                 .toList();
+    }
+
+    @Step("Передать в форму поиска запрос: {text}")
+    public void search(String text) {
+        clearAndType(searchInput, text);
+        click(searchButton);
     }
 
 }

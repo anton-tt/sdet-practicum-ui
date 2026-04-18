@@ -30,4 +30,10 @@ public abstract class BasePage {
         waitForClickable(locator).click();
     }
 
+    protected void clearAndType(By locator, String text) {
+        WebElement element = waitForClickable(locator);
+        element.clear();
+        element.sendKeys(text);
+    }
+
 }
