@@ -17,7 +17,8 @@ public class CartPage extends BasePage {
     private final By cartRows = By.cssSelector("#cart table tbody tr");
     private final By productNameLink = By.cssSelector("td.align_left a");
     private final By updateButton = By.id("cart_update");
-    private final By totalPriceLocator = By.cssSelector("span.bold.totalamout");;
+    private final By totalPriceLocator = By.cssSelector("span.bold.totalamout");
+    ;
 
     @Step("Получить из корзины данные товаров")
     public List<WebElement> getCartRows() {
@@ -30,9 +31,7 @@ public class CartPage extends BasePage {
     public CartItem mapRowToItem(WebElement row) {
         List<WebElement> cells = row.findElements(By.tagName("td"));
 
-        String name = row.findElement(productNameLink)
-                .getText()
-                .trim();//cells.get(1).getText().trim();
+        String name = getProductBaseName(row);
         double unitPrice = Double.parseDouble(
                 cells.get(3).getText().replace("$", "").trim()
         );

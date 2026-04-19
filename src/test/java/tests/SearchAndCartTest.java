@@ -2,20 +2,21 @@ package tests;
 
 import base.BaseTest;
 import enums.SortOption;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import models.CartItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebElement;
 import pages.CartPage;
 import pages.ProductPage;
 import pages.SearchPage;
 import utils.Utils;
 
-import java.util.List;
-
 import static base.TestData.SEARCH_SHIRT;
 
-public class SearchTest extends BaseTest {
+@Epic("UI тесты")
+@Feature("Проверка поисковой выдачи и корзины.")
+public class SearchAndCartTest extends BaseTest {
 
     private void searchAndSort(SearchPage searchPage, SortOption option) {
         homePage.search(SEARCH_SHIRT);
@@ -23,7 +24,7 @@ public class SearchTest extends BaseTest {
     }
 
     @Test
-    void shouldAddProductsFromSearchToCart() {
+    void shouldUpdateCheapestItemAndValidateCartTotal() {
         SearchPage searchPage = new SearchPage(driver);
         ProductPage productPage = new ProductPage(driver);
         CartPage cartPage = new CartPage(driver);
