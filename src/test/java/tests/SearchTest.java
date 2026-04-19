@@ -2,8 +2,11 @@ package tests;
 
 import base.BaseTest;
 import enums.SortOption;
+import models.CartItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebElement;
+import pages.CartPage;
 import pages.ProductPage;
 import pages.SearchPage;
 import utils.Utils;
@@ -13,25 +16,6 @@ import java.util.List;
 import static base.TestData.SEARCH_SHIRT;
 
 public class SearchTest extends BaseTest {
-    @Test
-    void searchAndSortTest() {
-        homePage.search(SEARCH_SHIRT);
-        SearchPage searchPage = new SearchPage(driver);
-        searchPage.sortBy(SortOption.NAME_ASC.getValue());
-
-        List<String> actual = searchPage.getProductNames();
-        List<String> expected = actual.stream()
-                .sorted()
-                .toList();
-        Assertions.assertEquals(expected, actual, "Сортировка в поиске работает некорректно");
-    }
-
-    @Test
-    void searchOpenProductTest() {
-        homePage.search(SEARCH_SHIRT);
-        SearchPage searchPage = new SearchPage(driver);
-        searchPage.openProductByIndex(2);
-    }
 
     private void searchAndSort(SearchPage searchPage, SortOption option) {
         homePage.search(SEARCH_SHIRT);
@@ -42,6 +26,7 @@ public class SearchTest extends BaseTest {
     void shouldAddProductsFromSearchToCart() {
         SearchPage searchPage = new SearchPage(driver);
         ProductPage productPage = new ProductPage(driver);
+        CartPage cartPage = new CartPage(driver);
 
         searchAndSort(searchPage, SortOption.NAME_ASC);
         searchPage.openProductByIndex(2);
@@ -56,6 +41,14 @@ public class SearchTest extends BaseTest {
         int qty3 = Utils.getRandomQuantity(1, 5);
         productPage.setQuantity(qty3);
         productPage.addToCart();
+
+        List<WebElement> cartRows = cartPage.getCartRows();
+        Assertions.assertEquals(2, cartRows.size(), "Должно быть 2 строки");
+
+        List<CartItem> cartItems = cartPage.getCartItems();
+        Assertions.assertEquals(2, cartItems.size(), "Должно быть 2 объекта");
+        CartItem item = cartPage.getCheapestItem();
+        System.out.println(item.getUnitPrice());
     }
 
 }
