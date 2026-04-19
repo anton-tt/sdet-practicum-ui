@@ -29,4 +29,12 @@ public class CartItem {
         return totalPrice;
     }
 
+    public int getDoubledQuantity() {
+        return quantity * 2;
+    }
+
+    public double getExpectedTotalAfterDoubling() {
+        return unitPrice * quantity * 2;
+    }
+
 }

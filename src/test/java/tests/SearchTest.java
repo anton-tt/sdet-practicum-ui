@@ -30,25 +30,27 @@ public class SearchTest extends BaseTest {
 
         searchAndSort(searchPage, SortOption.NAME_ASC);
         searchPage.openProductByIndex(2);
-
         int qty2 = Utils.getRandomQuantity(1, 5);
         productPage.setQuantity(qty2);
         productPage.addToCart();
 
         searchAndSort(searchPage, SortOption.NAME_ASC);
         searchPage.openProductByIndex(3);
-
         int qty3 = Utils.getRandomQuantity(1, 5);
         productPage.setQuantity(qty3);
         productPage.addToCart();
 
-        List<WebElement> cartRows = cartPage.getCartRows();
-        Assertions.assertEquals(2, cartRows.size(), "Должно быть 2 строки");
+        CartItem cheapest = cartPage.getCheapestItem();
+        cartPage.changeQuantity(
+                cheapest.getName(),
+                cheapest.getDoubledQuantity()
+        );
+        cartPage.updateCart();
 
-        List<CartItem> cartItems = cartPage.getCartItems();
-        Assertions.assertEquals(2, cartItems.size(), "Должно быть 2 объекта");
-        CartItem item = cartPage.getCheapestItem();
-        System.out.println(item.getUnitPrice());
+        double totalPrice = cartPage.getTotalPrice();
+        Assertions.assertTrue(totalPrice > 0,
+                "Итоговая сумма должна быть больше 0");
+        System.out.println("Final total price: " + totalPrice);
     }
 
 }

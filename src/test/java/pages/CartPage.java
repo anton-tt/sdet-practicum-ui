@@ -15,20 +15,24 @@ public class CartPage extends BasePage {
     }
 
     private final By cartRows = By.cssSelector("#cart table tbody tr");
+    private final By productNameLink = By.cssSelector("td.align_left a");
+    private final By updateButton = By.id("cart_update");
+    private final By totalPriceLocator = By.cssSelector("span.bold.totalamout");;
 
-    @Step("Получить товары из корзины в виде строк")
+    @Step("Получить из корзины данные товаров")
     public List<WebElement> getCartRows() {
-        return driver.findElements(cartRows)
+        return waitForAllElements(cartRows)
                 .stream()
-                //.filter(row -> row.findElements(By.tagName("td")).size() == 7)
-                .filter(row -> !row.findElements(By.cssSelector("td.align_left a")).isEmpty())
+                .filter(row -> !row.findElements(productNameLink).isEmpty())
                 .toList();
     }
 
     public CartItem mapRowToItem(WebElement row) {
         List<WebElement> cells = row.findElements(By.tagName("td"));
 
-        String name = cells.get(1).getText().trim();
+        String name = row.findElement(productNameLink)
+                .getText()
+                .trim();//cells.get(1).getText().trim();
         double unitPrice = Double.parseDouble(
                 cells.get(3).getText().replace("$", "").trim()
         );
@@ -42,7 +46,7 @@ public class CartPage extends BasePage {
         return new CartItem(name, unitPrice, quantity, totalPrice);
     }
 
-    @Step("Получить товары из корзины")
+    @Step("Получить товары в виде объектов")
     public List<CartItem> getCartItems() {
         return getCartRows()
                 .stream()
@@ -50,12 +54,51 @@ public class CartPage extends BasePage {
                 .toList();
     }
 
-    @Step("Найти самый дешевый товар в корзине")
+    @Step("Получить самый дешёвый товар")
     public CartItem getCheapestItem() {
         return getCartItems()
                 .stream()
                 .min(Comparator.comparing(CartItem::getUnitPrice))
                 .orElseThrow(() -> new RuntimeException("Корзина пуста"));
+    }
+
+    @Step("Найти в корзине данные товара по его имени")
+    public WebElement findRowByProductName(String productName) {
+        return getCartRows()
+                .stream()
+                .filter(row -> getProductBaseName(row).equals(productName))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Товар не найден в корзине: " + productName));
+    }
+
+    @Step("Изменить количество товара")
+    public void changeQuantity(String productName, int newQuantity) {
+        WebElement row = findRowByProductName(productName);
+        WebElement qtyInput = row.findElement(By.cssSelector("td input"));
+        qtyInput.clear();
+        qtyInput.sendKeys(String.valueOf(newQuantity));
+    }
+
+    private String getProductBaseName(WebElement row) {
+        return row.findElement(productNameLink).getText().trim();
+    }
+
+    @Step("Обновить корзину и дождаться обновления")
+    public void updateCart() {
+        driver.findElement(updateButton).click();
+        waitForAllElements(cartRows);
+    }
+
+    @Step("Получить итоговую сумму корзины")
+    public double getTotalPrice() {
+        return waitForAllElements(totalPriceLocator)
+                .stream()
+                .map(WebElement::getText)
+                .filter(text -> text.startsWith("$"))
+                .map(text -> text.replace("$", "").trim())
+                .mapToDouble(Double::parseDouble)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Итоговая цена не найдена"));
     }
 
 }
