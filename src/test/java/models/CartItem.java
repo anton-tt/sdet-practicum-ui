@@ -33,8 +33,8 @@ public class CartItem {
         return quantity * 2;
     }
 
-    public double getExpectedTotalAfterDoubling() {
-        return unitPrice * quantity * 2;
+    public double getExpectedTotal() {
+        return unitPrice * quantity;
     }
 
 }

@@ -18,9 +18,9 @@ public class CartPage extends BasePage {
     private final By productNameLink = By.cssSelector("td.align_left a");
     private final By updateButton = By.id("cart_update");
     private final By totalPriceLocator = By.cssSelector("span.bold.totalamout");
-    ;
+    private final By shippingPriceLocator = By.cssSelector("#totals_table tr:nth-of-type(2) td:nth-of-type(2) span");
 
-    @Step("Получить из корзины данные товаров")
+    @Step("Получить из корзины построчно данные товаров")
     public List<WebElement> getCartRows() {
         return waitForAllElements(cartRows)
                 .stream()
@@ -32,15 +32,11 @@ public class CartPage extends BasePage {
         List<WebElement> cells = row.findElements(By.tagName("td"));
 
         String name = getProductBaseName(row);
-        double unitPrice = Double.parseDouble(
-                cells.get(3).getText().replace("$", "").trim()
-        );
+        double unitPrice = parsePrice(cells.get(3).getText());
         int quantity = Integer.parseInt(
                 cells.get(4).findElement(By.tagName("input")).getAttribute("value")
         );
-        double totalPrice = Double.parseDouble(
-                cells.get(5).getText().replace("$", "").trim()
-        );
+        double totalPrice = parsePrice(cells.get(5).getText());
 
         return new CartItem(name, unitPrice, quantity, totalPrice);
     }
@@ -78,26 +74,46 @@ public class CartPage extends BasePage {
         qtyInput.sendKeys(String.valueOf(newQuantity));
     }
 
-    private String getProductBaseName(WebElement row) {
-        return row.findElement(productNameLink).getText().trim();
-    }
-
-    @Step("Обновить корзину и дождаться обновления")
+    @Step("Обновить корзину и дождаться перерисовки")
     public void updateCart() {
         driver.findElement(updateButton).click();
         waitForAllElements(cartRows);
     }
 
-    @Step("Получить итоговую сумму корзины")
+    @Step("Получить итоговую стоимость заказа")
     public double getTotalPrice() {
         return waitForAllElements(totalPriceLocator)
                 .stream()
                 .map(WebElement::getText)
-                .filter(text -> text.startsWith("$"))
-                .map(text -> text.replace("$", "").trim())
-                .mapToDouble(Double::parseDouble)
+                .filter(text -> text.contains("$"))
+                .map(this::parsePrice)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Итоговая цена не найдена"));
+    }
+
+    @Step("Рассчитать ожидаемую стоимость товаров")
+    public double calculateSubtotal() {
+        return getCartItems()
+                .stream()
+                .mapToDouble(CartItem::getExpectedTotal)
+                .sum();
+    }
+    @Step("Получить стоимость доставки")
+    public double getShippingPrice() {
+        return parsePrice(find(shippingPriceLocator).getText());
+    }
+
+    @Step("Рассчитать ожидаемую стоимость заказа")
+    public double calculateExpectedTotal() {
+        return calculateSubtotal() + getShippingPrice();
+    }
+
+    private double parsePrice(String text) {
+        return Double.parseDouble(text.replace("$", "").trim());
+    }
+
+    private String getProductBaseName(WebElement row) {
+        return row.findElement(productNameLink).getText().trim();
     }
 
 }

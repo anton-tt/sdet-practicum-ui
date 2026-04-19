@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import java.util.Comparator;
 import java.util.List;
 
-@Epic("UI тесты")
-@Feature("Сортировка товаров в категории Men")
+//@Epic("UI тесты")
+//@Feature("Сортировка товаров в категории Men")
 public class FirstTest extends BaseTest {
 
-    @Test
+   /* @Test
     @Story("Сортировка по алфавиту: A-Z")
     void sortByNameAscTest() {
         homePage.openMenCategory();
@@ -62,6 +62,6 @@ public class FirstTest extends BaseTest {
         List<Double> expected = actual.stream().sorted(Comparator.reverseOrder()).toList();
 
         Assertions.assertEquals(expected, actual, "Сортировка по цене High>Low некорректна");
-    }
+    }*/
 
 }

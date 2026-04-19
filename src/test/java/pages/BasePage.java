@@ -26,6 +26,10 @@ public abstract class BasePage {
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
 
+    protected WebElement find(By locator) {
+        return driver.findElement(locator);
+    }
+
     protected void click(By locator) {
         waitForClickable(locator).click();
     }

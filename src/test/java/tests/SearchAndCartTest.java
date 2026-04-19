@@ -48,10 +48,14 @@ public class SearchAndCartTest extends BaseTest {
         );
         cartPage.updateCart();
 
-        double totalPrice = cartPage.getTotalPrice();
-        Assertions.assertTrue(totalPrice > 0,
-                "Итоговая сумма должна быть больше 0");
-        System.out.println("Final total price: " + totalPrice);
+        double expectedTotal = cartPage.calculateExpectedTotal();
+        double actualTotal = cartPage.getTotalPrice();
+        Assertions.assertEquals(
+                expectedTotal,
+                actualTotal,
+                0.01,
+                "Итоговая сумма корзины рассчитана неверно"
+        );
     }
 
 }
