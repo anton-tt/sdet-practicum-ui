@@ -23,6 +23,7 @@ public class HomePage extends BasePage {
     private final By productPricesLocator = By.cssSelector(".oneprice");
     private final By searchInput = By.id("filter_keyword");
     private final By searchButton = By.cssSelector(".button-in-search");
+    private final By cartButton = By.cssSelector("a[href*='checkout/cart']");
 
     @Step("Открыть главную страницу")
     public void open() {
@@ -64,6 +65,17 @@ public class HomePage extends BasePage {
     public void search(String text) {
         clearAndType(searchInput, text);
         click(searchButton);
+    }
+
+    @Step("Открыть товар номер {index} на главной странице")
+    public void openProductByIndex(int index) {
+        List<WebElement> products = waitForAllElements(productNamesLocator);
+        products.get(index - 1).click();
+    }
+
+    @Step("Открыть корзину через иконку")
+    public void openCart() {
+        click(cartButton);
     }
 
 }

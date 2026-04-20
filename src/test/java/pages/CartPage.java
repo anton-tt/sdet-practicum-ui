@@ -19,6 +19,7 @@ public class CartPage extends BasePage {
     private final By updateButton = By.id("cart_update");
     private final By totalPriceLocator = By.cssSelector("span.bold.totalamout");
     private final By shippingPriceLocator = By.cssSelector("#totals_table tr:nth-of-type(2) td:nth-of-type(2) span");
+    private final By removeButton = By.cssSelector("a[href*='remove=']");
 
     @Step("Получить из корзины построчно данные товаров")
     public List<WebElement> getCartRows() {
@@ -98,6 +99,7 @@ public class CartPage extends BasePage {
                 .mapToDouble(CartItem::getExpectedTotal)
                 .sum();
     }
+
     @Step("Получить стоимость доставки")
     public double getShippingPrice() {
         return parsePrice(find(shippingPriceLocator).getText());
@@ -114,6 +116,22 @@ public class CartPage extends BasePage {
 
     private String getProductBaseName(WebElement row) {
         return row.findElement(productNameLink).getText().trim();
+    }
+
+    public void removeItemByIndex(int index) {
+        List<WebElement> rows = getCartRows();
+        WebElement row = rows.get(index - 1);
+        row.findElement(removeButton).click();
+    }
+
+    @Step("Удалить все чётные товары из корзины")
+    public void removeEvenItems() {
+        List<WebElement> rows = getCartRows();
+        for (int i = rows.size(); i >= 1; i--) {
+            if (i % 2 == 0) {
+                removeItemByIndex(i);
+            }
+        }
     }
 
 }

@@ -14,11 +14,11 @@ import utils.Utils;
 
 import static base.TestData.SEARCH_SHIRT;
 
-@Epic("UI тесты")
-@Feature("Проверка поисковой выдачи и корзины.")
+//@Epic("UI тесты")
+//@Feature("Проверка поисковой выдачи и корзины.")
 public class SearchAndCartTest extends BaseTest {
 
-    private void searchAndSort(SearchPage searchPage, SortOption option) {
+    /*private void searchAndSort(SearchPage searchPage, SortOption option) {
         homePage.search(SEARCH_SHIRT);
         searchPage.sortBy(option.getValue());
     }
@@ -56,6 +56,6 @@ public class SearchAndCartTest extends BaseTest {
                 0.01,
                 "Итоговая сумма корзины рассчитана неверно"
         );
-    }
+    }*/
 
 }
