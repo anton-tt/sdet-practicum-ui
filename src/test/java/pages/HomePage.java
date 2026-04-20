@@ -41,7 +41,7 @@ public class HomePage extends BasePage {
         click(menCategoryLink);
     }
 
-    @Step("Выбрать сортировку: {option}")
+    @Step("Выбрать сортировку: {value}")
     public void selectSortOptionByValue(String value) {
         List<WebElement> oldProducts = waitForAllElements(productCards);
         Select select = new Select(waitForClickable(sortDropdown));
