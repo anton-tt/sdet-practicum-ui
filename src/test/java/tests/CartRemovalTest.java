@@ -22,10 +22,11 @@ public class CartRemovalTest extends BaseTest {
 
         List<Integer> randomProducts = Utils.getRandomUniqueNumbers(1, 16, 5);
         for (Integer index : randomProducts) {
-            homePage.open();
+            homePage.goHomeByLogo();
             homePage.openProductByIndex(index);
             int quantity = Utils.getRandomQuantity(1, 5);
             productPage.setQuantity(quantity);
+            productPage.selectRequiredOptionsIfPresent();
             productPage.addToCart();
         }
         cartPage.removeEvenItems();

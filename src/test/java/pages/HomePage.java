@@ -24,10 +24,16 @@ public class HomePage extends BasePage {
     private final By searchInput = By.id("filter_keyword");
     private final By searchButton = By.cssSelector(".button-in-search");
     private final By cartButton = By.cssSelector("a[href*='checkout/cart']");
+    private final By logo = By.cssSelector("a.logo");
 
     @Step("Открыть главную страницу")
     public void open() {
         driver.get(TEST_STORE_URL);
+    }
+
+    @Step("Перейти на главную страницу через логотип")
+    public void goHomeByLogo() {
+        click(logo);
     }
 
     @Step("Открыть категорию Men")
