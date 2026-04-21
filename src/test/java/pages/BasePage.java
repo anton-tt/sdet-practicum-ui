@@ -1,0 +1,43 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
+
+public abstract class BasePage {
+    protected WebDriver driver;
+    protected WebDriverWait wait;
+
+    public BasePage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    protected WebElement waitForClickable(By locator) {
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+
+    protected List<WebElement> waitForAllElements(By locator) {
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+    }
+
+    protected WebElement find(By locator) {
+        return driver.findElement(locator);
+    }
+
+    protected void click(By locator) {
+        waitForClickable(locator).click();
+    }
+
+    protected void clearAndType(By locator, String text) {
+        WebElement element = waitForClickable(locator);
+        element.clear();
+        element.sendKeys(text);
+    }
+
+}
