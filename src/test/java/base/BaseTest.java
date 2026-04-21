@@ -15,6 +15,7 @@ public class BaseTest {
     void setUp() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+        driver.manage().window().maximize();
         homePage = new HomePage(driver);
         homePage.open();
     }

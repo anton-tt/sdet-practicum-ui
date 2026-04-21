@@ -3,9 +3,6 @@ package utils;
 import java.util.*;
 
 public class Utils {
-    private Utils() {
-    }
-
     private static final Random random = new Random();
 
     public static int getRandomQuantity(int min, int max) {

@@ -12,21 +12,14 @@ public class SearchPage extends BasePage {
     public SearchPage(WebDriver driver) {
         super(driver);
     }
+
     private final By productNamesLocator = By.cssSelector(".prdocutname");
     private final By sortDropdown = By.id("sort");
+
     @Step("Сортировка товаров в поисковой выдаче: {value}")
     public void sortBy(String value) {
         Select select = new Select(waitForClickable(sortDropdown));
         select.selectByValue(value);
-    }
-
-    public List<String> getProductNames() {
-        return waitForAllElements(productNamesLocator)
-                .stream()
-                .map(WebElement::getText)
-                .map(String::trim)
-                .filter(text -> !text.isBlank())
-                .toList();
     }
 
     @Step("Открыть товар номер {index} из поисковой выдачи")

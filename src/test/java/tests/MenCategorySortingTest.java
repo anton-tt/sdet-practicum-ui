@@ -14,7 +14,7 @@ import java.util.List;
 
 @Epic("UI тесты")
 @Feature("Сортировка товаров в категории Men")
-public class FirstTest extends BaseTest {
+public class MenCategorySortingTest extends BaseTest {
 
     @Test
     @Story("Сортировка по алфавиту: A-Z")

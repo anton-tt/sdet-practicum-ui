@@ -73,6 +73,11 @@ public class HomePage extends BasePage {
         click(searchButton);
     }
 
+    @Step("Найти товар {text} и открыть результаты поиска")
+    public void searchProduct(String text) {
+        search(text);
+    }
+
     @Step("Открыть товар номер {index} на главной странице")
     public void openProductByIndex(int index) {
         List<WebElement> products = waitForAllElements(productNamesLocator);
