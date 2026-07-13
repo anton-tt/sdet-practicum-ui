@@ -9,6 +9,7 @@ import io.qameta.allure.Story;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class MenCategorySortingTest extends BaseTest {
         homePage.selectSortOptionByValue(SortOption.NAME_DESC.getValue());
 
         List<String> actual = homePage.getProductNames();
-        List<String> expected = actual.stream().sorted(Comparator.reverseOrder()).toList();
+        List<String> expected = new ArrayList<>();//actual.stream().sorted(Comparator.reverseOrder()).toList();
 
         Assertions.assertEquals(expected, actual, "Сортировка по имени Z-A некорректна");
     }
