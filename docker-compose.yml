@@ -33,7 +33,6 @@ services:
       - selenoid
     working_dir: /app
     volumes:
-      - .:/app
       - maven-cache:/root/.m2
     command: mvn clean test -Dremote=true
 
