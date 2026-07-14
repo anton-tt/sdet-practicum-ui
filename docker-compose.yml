@@ -35,7 +35,7 @@ services:
     volumes:
       - maven-cache:/root/.m2
       - .:/app
-    command: mvn clean test -Dremote=true
+    command: mvn test -Dremote=true
 
 
 volumes:
