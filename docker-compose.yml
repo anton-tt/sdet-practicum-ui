@@ -12,7 +12,7 @@ services:
       - "-limit"
       - "5"
       - "-container-network"
-      - "bridge"
+      - "ui-autotests_default"
 
 
   selenoid-ui:
