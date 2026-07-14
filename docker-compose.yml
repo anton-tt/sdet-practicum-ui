@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+
+  selenoid:
+    image: aerokube/selenoid:latest-release
+    container_name: selenoid
+    ports:
+      - "4444:4444"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./browsers.json:/etc/selenoid/browsers.json
+    command:
+      - "-limit"
+      - "5"
+      - "-container-network"
+      - "sdet-practicum-ui_default"
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui:latest-release
+    container_name: selenoid-ui
+    depends_on:
+      - selenoid
+    ports:
+      - "8080:8080"
+    command:
+      - "--selenoid-uri=http://selenoid:4444"
+
+  test-runner:
+    build: .
+    container_name: test-runner
+    depends_on:
+      - selenoid
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ~/.m2:/root/.m2
+    command: mvn clean test -Dremote=true

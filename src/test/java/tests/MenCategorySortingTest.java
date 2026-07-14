@@ -36,7 +36,7 @@ public class MenCategorySortingTest extends BaseTest {
         homePage.selectSortOptionByValue(SortOption.NAME_DESC.getValue());
 
         List<String> actual = homePage.getProductNames();
-        List<String> expected = new ArrayList<>();//actual.stream().sorted(Comparator.reverseOrder()).toList();
+        List<String> expected = actual.stream().sorted(Comparator.reverseOrder()).toList();
 
         Assertions.assertEquals(expected, actual, "Сортировка по имени Z-A некорректна");
     }
