@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   selenoid:
@@ -14,7 +12,8 @@ services:
       - "-limit"
       - "5"
       - "-container-network"
-      - "sdet-practicum-ui_default"
+      - "bridge"
+
 
   selenoid-ui:
     image: aerokube/selenoid-ui:latest-release
@@ -26,20 +25,19 @@ services:
     command:
       - "--selenoid-uri=http://selenoid:4444"
 
-  services:
 
-    test-runner:
-      build: .
-      container_name: test-runner
-      depends_on:
-        - selenoid
-      working_dir: /app
-      volumes:
-        - .:/app
-        - maven-cache:/root/.m2
-      command: mvn clean test -Dremote=true
+  test-runner:
+    build: .
+    container_name: test-runner
+    depends_on:
+      - selenoid
+    working_dir: /app
+    volumes:
+      - .:/app
+      - maven-cache:/root/.m2
+    command: mvn clean test -Dremote=true
 
 
-  volumes:
-    maven-cache:
+volumes:
 
+  maven-cache:
