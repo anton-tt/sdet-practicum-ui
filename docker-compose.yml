@@ -26,13 +26,20 @@ services:
     command:
       - "--selenoid-uri=http://selenoid:4444"
 
-  test-runner:
-    build: .
-    container_name: test-runner
-    depends_on:
-      - selenoid
-    working_dir: /app
-    volumes:
-      - .:/app
-      - ~/.m2:/root/.m2
-    command: mvn clean test -Dremote=true
+  services:
+
+    test-runner:
+      build: .
+      container_name: test-runner
+      depends_on:
+        - selenoid
+      working_dir: /app
+      volumes:
+        - .:/app
+        - maven-cache:/root/.m2
+      command: mvn clean test -Dremote=true
+
+
+  volumes:
+    maven-cache:
+
